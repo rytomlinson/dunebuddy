@@ -20,7 +20,8 @@
     "db:up": "docker compose up -d db",
     "db:down": "docker compose down",
     "test": "npm test -w common",
-    "start": "npm run start -w data-service"
+    "start": "npm run start -w data-service",
+    "deploy": "bash scripts/deploy.sh"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",

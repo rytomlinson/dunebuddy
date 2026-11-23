@@ -75,11 +75,25 @@ npm run build
 TypeScript (strict), React 18 + Vite, Redux Toolkit, react-jss, tRPC, Zod, PostgreSQL with
 node-pg-migrate.
 
-## Deploying (Render)
+## Deploying
 
-`render.yaml` defines a free web service (API and built UI on one server) plus a free Postgres
-database. In the Render dashboard, choose **New → Blueprint** and pick this repo. Each deploy builds
-the app, runs migrations on start, and serves it at `https://<service-name>.onrender.com`.
+Live at **https://srv1307055.hstgr.cloud**, on the Hostinger VPS alongside mjbuddy and vetboats.
+It runs from `/var/www/dunebuddy` under pm2 (`dunebuddy-api`, port 3201), behind nginx with a
+Let's Encrypt certificate, using its own database in the server's Postgres. Server secrets live in
+`/var/www/dunebuddy/.env`.
 
-Free-tier caveats: the service sleeps after about 15 minutes idle, so the first visit takes ~30s.
-The free database expires after 30 days unless upgraded.
+To ship an update, commit it and run:
+
+```bash
+npm run deploy
+```
+
+This uploads the committed `HEAD`, builds it in `/var/www/dunebuddy.new` while the current version
+keeps serving, runs migrations, swaps it in, restarts, and checks the live site. If the check fails,
+it rolls back automatically. To return to the previous release by hand:
+
+```bash
+npm run deploy -- --rollback
+```
+
+`render.yaml` is also included, in case you ever want to host on Render instead.
