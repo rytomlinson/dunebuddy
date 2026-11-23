@@ -27,6 +27,30 @@ Swapping into an unclaimed faction happens at the table, outside the app.
 The faction emblems are simple original designs, not the game's artwork. To use your own images,
 see `ui/public/factions/README.md`.
 
+### Atreides logbook
+
+A private page for the Atreides player to log every treachery card seen at auction and track who
+holds what (`/logbook`).
+
+### Rules reference
+
+A searchable copy of the base rulebook, the Ixians & Tleilaxu rulebook and the official FAQ
+(`/rules`), organised by turn phase and faction, with each official Q&A placed next to the rule it
+clarifies. Search shows each match in context; tapping one jumps to that paragraph. Anyone can edit
+a section, but every edit needs a name and an explanation, is labelled on the section forever, and
+appears in the edit log (`/rules/log`). The original text is always kept.
+
+The rules text belongs to Gale Force Nine, so it is **not in this repo** and the pages are behind a
+shared passcode (`RULES_PASSCODE` in `.env`). The text is built from the rulebook PDFs into a JSON
+file outside the repo and loaded with:
+
+```bash
+npm run build && npm run import-rules -w data-service -- /path/to/rules.json
+```
+
+Re-running the import is safe: new sections are added, and sections someone has edited keep their
+edits.
+
 ## Setup
 
 Requires Node.js 18+ and Docker (for Postgres). If you have a local PostgreSQL 14+, you can use it

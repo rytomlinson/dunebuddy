@@ -51,3 +51,8 @@ export function rememberLogbook(book: SavedLogbook): void {
 
 export const loadGameLogbook = (gameId: string) => read(gameLogbookKey(gameId));
 export const saveGameLogbook = (gameId: string, logbookId: string) => write(gameLogbookKey(gameId), logbookId);
+
+// The rules passcode, entered once per device.
+const RULES_PASSCODE_KEY = 'dunebuddy:rulesPasscode';
+export const loadRulesPasscode = () => read(RULES_PASSCODE_KEY);
+export const saveRulesPasscode = (passcode: string | null) => write(RULES_PASSCODE_KEY, passcode);

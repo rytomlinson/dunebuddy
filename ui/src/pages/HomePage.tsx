@@ -39,6 +39,12 @@ const TOOLS: { to: string; name: string; blurb: string; emblem: FactionId }[] = 
     emblem: 'emperor',
   },
   {
+    to: '/rules',
+    name: 'Rules reference',
+    blurb: 'Search the rulebooks and official FAQ, with every edit logged.',
+    emblem: 'bene-gesserit',
+  },
+  {
     to: '/logbook',
     name: 'Atreides logbook',
     blurb: 'Keep track of every treachery card you see go to auction.',

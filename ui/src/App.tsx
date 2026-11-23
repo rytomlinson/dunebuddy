@@ -11,6 +11,8 @@ import { DrawPage } from './pages/DrawPage';
 import { GamePage } from './pages/GamePage';
 import { LogbookPage } from './pages/LogbookPage';
 import { LogbooksPage } from './pages/LogbooksPage';
+import { RulesLogPage } from './pages/RulesLogPage';
+import { RulesPage } from './pages/RulesPage';
 
 export function App() {
   const [queryClient] = useState(() => new QueryClient());
@@ -28,6 +30,8 @@ export function App() {
                 <Route path="/g/:gameId" element={<GamePage />} />
                 <Route path="/logbook" element={<LogbooksPage />} />
                 <Route path="/log/:logId" element={<LogbookPage />} />
+                <Route path="/rules" element={<RulesPage />} />
+                <Route path="/rules/log" element={<RulesLogPage />} />
                 <Route path="*" element={<HomePage />} />
               </Routes>
             </BrowserRouter>

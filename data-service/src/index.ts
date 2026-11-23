@@ -3,6 +3,7 @@ import { existsSync } from 'fs';
 import { resolve } from 'path';
 import express from 'express';
 import cors from 'cors';
+import compression from 'compression';
 import { createExpressMiddleware } from '@trpc/server/adapters/express';
 import { initDb } from './db.js';
 import { appRouter } from './trpcRouters/index.js';
@@ -12,6 +13,9 @@ config({ path: resolve(import.meta.dirname, '../../.env') });
 
 const app = express();
 
+// Behind nginx (which doesn't gzip proxied responses); the rules text compresses ~4x.
+app.set('trust proxy', 'loopback');
+app.use(compression());
 app.use(cors());
 app.use(express.json());
 
