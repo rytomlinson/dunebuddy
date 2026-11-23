@@ -48,14 +48,14 @@ const useStyles = createUseStyles((theme: Theme) => ({
 }));
 
 /**
- * Home-page card for the Atreides player: reopen a logbook from this device, or start one
+ * Card for the Atreides player: reopen a logbook from this device, or start one
  * without a faction draw.
  */
 export function LogbookStarter() {
   const c = useStyles();
   const navigate = useNavigate();
   const [saved] = useState(loadLogbooks);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(() => loadLogbooks().length === 0);
   const [name, setName] = useState('Atreides logbook');
   const [selected, setSelected] = useState<Set<FactionId>>(new Set(DEFAULT_FACTIONS));
   const [openingHands, setOpeningHands] = useState(true);
