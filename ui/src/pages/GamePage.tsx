@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { createUseStyles } from 'react-jss';
-import { MAX_PLAYERS, MIN_PLAYERS } from 'common';
+import { MIN_PLAYERS, maxPlayersFor } from 'common';
 import { trpc } from '../trpc';
 import type { Theme } from '../theme';
 import { Ballot } from '../components/Ballot';
@@ -78,7 +78,7 @@ export function GamePage() {
   }
 
   const g = game.data;
-  const maxPlayers = Math.min(MAX_PLAYERS, g.factions.length);
+  const maxPlayers = maxPlayersFor(g.factions.length);
   const canCalculate = g.players.length >= MIN_PLAYERS && g.players.length <= g.factions.length;
   const shareUrl = window.location.href;
 

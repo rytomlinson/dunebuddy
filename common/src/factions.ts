@@ -45,4 +45,10 @@ export function factionName(id: string): string {
 
 export const DEFAULT_VOTES_PER_PLAYER = 2;
 export const MIN_PLAYERS = 2;
-export const MAX_PLAYERS = 6;
+
+/**
+ * One player per faction in play: 6 for the base game, plus 2 for each expansion.
+ */
+export function maxPlayersFor(factionsInPlay: number): number {
+  return factionsInPlay;
+}

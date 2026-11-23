@@ -3,8 +3,8 @@ import { TRPCError } from '@trpc/server';
 import {
   assignFactions,
   factionName,
-  MAX_PLAYERS,
   MIN_PLAYERS,
+  maxPlayersFor,
   type CreateGame,
   type DrawResult,
   type FactionId,
@@ -172,7 +172,7 @@ export async function submitBallot(data: SubmitBallot): Promise<{ editToken: str
         `SELECT COUNT(*)::int AS n FROM ballots WHERE game_id = :gameId`,
         { gameId: game.id }
       );
-      const maxPlayers = Math.min(MAX_PLAYERS, game.factions.length);
+      const maxPlayers = maxPlayersFor(game.factions.length);
       if (countRows[0].n >= maxPlayers) {
         throw new TRPCError({ code: 'BAD_REQUEST', message: `This game is full (${maxPlayers} players)` });
       }
