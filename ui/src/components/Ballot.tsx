@@ -9,49 +9,35 @@ import { errorMessage, loadEditToken, saveEditToken } from '../utils';
 import { FactionEmblem } from './FactionEmblem';
 import { Button, Card, ErrorText, Muted } from './ui';
 
+const PHONE = '@media (max-width: 600px)';
+
 const useStyles = createUseStyles((theme: Theme) => ({
-  nameRow: {
-    display: 'flex',
-    gap: theme.spacing.md,
-    alignItems: 'flex-end',
-    flexWrap: 'wrap',
-    marginBottom: theme.spacing.md,
-  },
   label: {
     display: 'grid',
     gap: theme.spacing.xs,
-    flex: '1 1 220px',
+    margin: `${theme.spacing.md} 0`,
     fontSize: theme.fontSizes.sm,
     color: theme.colors.textSecondary,
     textTransform: 'uppercase',
     letterSpacing: '0.06em',
   },
   input: {
-    minHeight: 44,
-    padding: `0 ${theme.spacing.sm}`,
+    minHeight: 48,
+    padding: `0 ${theme.spacing.md}`,
     background: theme.colors.background,
     border: `1px solid ${theme.colors.border}`,
     borderRadius: theme.borderRadius.md,
-    fontSize: theme.fontSizes.lg,
+    // 16px+ stops iOS Safari zooming in on focus.
+    fontSize: 17,
+    textTransform: 'none',
+    letterSpacing: 'normal',
+    color: theme.colors.text,
   },
-  remaining: {
-    display: 'flex',
-    alignItems: 'center',
-    gap: theme.spacing.xs,
-    minHeight: 44,
-    fontWeight: 600,
-  },
-  pip: {
-    width: 14,
-    height: 14,
-    borderRadius: '50%',
-    border: `2px solid ${theme.colors.primary}`,
-  },
-  pipFull: { background: theme.colors.primary },
   grid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
     gap: theme.spacing.sm,
+    [PHONE]: { gridTemplateColumns: '1fr' },
   },
   faction: {
     display: 'flex',
@@ -62,31 +48,85 @@ const useStyles = createUseStyles((theme: Theme) => ({
     borderRadius: theme.borderRadius.lg,
     background: theme.colors.background,
     border: `2px solid ${theme.colors.border}`,
-    transition: 'border-color 120ms',
+    transition: 'border-color 120ms, background 120ms',
+    [PHONE]: {
+      flexDirection: 'row',
+      padding: `${theme.spacing.sm} ${theme.spacing.sm} ${theme.spacing.sm} ${theme.spacing.md}`,
+      gap: theme.spacing.md,
+    },
   },
-  factionVoted: { borderColor: theme.colors.primary },
-  factionName: { fontWeight: 600, textAlign: 'center' },
-  stepper: { display: 'flex', alignItems: 'center', gap: theme.spacing.sm },
+  factionVoted: { borderColor: theme.colors.primary, background: theme.colors.surfaceHover },
+  // Tapping the emblem or name adds a vote: a big, easy target on phones.
+  factionTap: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: theme.spacing.sm,
+    background: 'none',
+    border: 'none',
+    padding: 0,
+    cursor: 'pointer',
+    '&:disabled': { cursor: 'default' },
+    [PHONE]: { flexDirection: 'row', flex: 1, minWidth: 0, gap: theme.spacing.md, minHeight: 48 },
+  },
+  factionName: {
+    fontWeight: 600,
+    textAlign: 'center',
+    fontSize: theme.fontSizes.lg,
+    [PHONE]: { textAlign: 'left' },
+  },
+  stepper: { display: 'flex', alignItems: 'center', gap: theme.spacing.xs },
   stepBtn: {
-    width: 36,
-    height: 36,
+    width: 44,
+    height: 44,
     borderRadius: '50%',
     border: `1px solid ${theme.colors.border}`,
     background: theme.colors.surfaceHover,
-    fontSize: 20,
+    fontSize: 22,
     lineHeight: 1,
     cursor: 'pointer',
-    '&:disabled': { opacity: 0.3, cursor: 'not-allowed' },
+    '&:disabled': { opacity: 0.25, cursor: 'not-allowed' },
   },
-  count: { minWidth: 20, textAlign: 'center', fontSize: theme.fontSizes.xl, fontWeight: 700 },
-  actions: {
+  count: { minWidth: 24, textAlign: 'center', fontSize: theme.fontSizes.xl, fontWeight: 700 },
+  // Votes-left and submit stay in reach at the bottom of the screen.
+  bar: {
+    position: 'sticky',
+    bottom: 0,
+    zIndex: 5,
     display: 'flex',
-    gap: theme.spacing.sm,
     alignItems: 'center',
-    flexWrap: 'wrap',
-    marginTop: theme.spacing.lg,
+    gap: theme.spacing.sm,
+    margin: `${theme.spacing.md} -${theme.spacing.lg} -${theme.spacing.lg}`,
+    padding: `${theme.spacing.md} ${theme.spacing.lg}`,
+    paddingBottom: `calc(${theme.spacing.md} + env(safe-area-inset-bottom))`,
+    background: theme.colors.surface,
+    borderTop: `1px solid ${theme.colors.border}`,
+    borderRadius: `0 0 ${theme.borderRadius.lg} ${theme.borderRadius.lg}`,
+    [PHONE]: {
+      margin: `${theme.spacing.md} -${theme.spacing.md} -${theme.spacing.md}`,
+      padding: `${theme.spacing.sm} ${theme.spacing.md}`,
+      paddingBottom: `calc(${theme.spacing.sm} + env(safe-area-inset-bottom))`,
+      borderRadius: 0,
+      boxShadow: '0 -8px 16px rgba(0,0,0,0.35)',
+    },
   },
-  saved: { color: theme.colors.success, fontSize: theme.fontSizes.md },
+  pips: { display: 'flex', alignItems: 'center', gap: 4, flexWrap: 'wrap', flex: '0 1 auto' },
+  pip: { width: 12, height: 12, borderRadius: '50%', border: `2px solid ${theme.colors.primary}` },
+  pipFull: { background: theme.colors.primary },
+  left: { fontWeight: 600, whiteSpace: 'nowrap', marginLeft: 4 },
+  barButtons: { display: 'flex', gap: theme.spacing.sm, marginLeft: 'auto' },
+  submit: { minHeight: 48, padding: '0 20px', fontSize: theme.fontSizes.lg },
+  status: { marginTop: theme.spacing.md, fontSize: theme.fontSizes.md },
+  saved: { color: theme.colors.success },
+  withdraw: {
+    background: 'none',
+    border: 'none',
+    padding: `${theme.spacing.sm} 0`,
+    color: theme.colors.error,
+    textDecoration: 'underline',
+    cursor: 'pointer',
+    fontSize: theme.fontSizes.md,
+  },
 }));
 
 export function Ballot({ game }: { game: GameView }) {
@@ -151,44 +191,48 @@ export function Ballot({ game }: { game: GameView }) {
     setDirty(true);
   };
 
-  const canSubmit = remaining === 0 && name.trim().length > 0 && !submit.isPending && (dirty || !hasBallot);
+  const trimmed = name.trim();
+  const canSubmit = remaining === 0 && trimmed.length > 0 && !submit.isPending && (dirty || !hasBallot);
+  const hint = !trimmed ? 'Enter your name' : remaining > 0 ? `${remaining} left` : 'Ready';
 
   return (
     <Card title={hasBallot ? 'Your ballot' : 'Cast your votes'}>
       <Muted>
-        Spend all {game.votesPerPlayer} votes. Stack them on one faction or split them. Nobody sees anyone's
-        votes until the draw.
+        Spend all {game.votesPerPlayer} votes on one faction or split them. Nobody sees anyone's votes until the
+        draw.
       </Muted>
 
-      <div className={c.nameRow} style={{ marginTop: 16 }}>
-        <label className={c.label}>
-          Your name
-          <input
-            className={c.input}
-            value={name}
-            maxLength={40}
-            autoComplete="nickname"
-            onChange={(e) => {
-              setName(e.target.value);
-              setDirty(true);
-            }}
-          />
-        </label>
-        <div className={c.remaining} aria-live="polite" title={`${remaining} votes left`}>
-          {Array.from({ length: game.votesPerPlayer }, (_, i) => (
-            <span key={i} className={`${c.pip} ${i < spent ? c.pipFull : ''}`} />
-          ))}
-          <span style={{ marginLeft: 8 }}>{remaining} left</span>
-        </div>
-      </div>
+      <label className={c.label}>
+        Your name
+        <input
+          className={c.input}
+          value={name}
+          maxLength={40}
+          autoComplete="nickname"
+          autoCapitalize="words"
+          enterKeyHint="done"
+          onChange={(e) => {
+            setName(e.target.value);
+            setDirty(true);
+          }}
+        />
+      </label>
 
       <div className={c.grid}>
         {(game.factions as FactionId[]).map((f) => {
           const n = votes[f] ?? 0;
           return (
             <div key={f} className={`${c.faction} ${n > 0 ? c.factionVoted : ''}`}>
-              <FactionEmblem faction={f} size={64} />
-              <div className={c.factionName}>{factionName(f)}</div>
+              <button
+                type="button"
+                className={c.factionTap}
+                disabled={remaining === 0}
+                aria-label={`Add a vote to ${factionName(f)}`}
+                onClick={() => change(f, 1)}
+              >
+                <FactionEmblem faction={f} size={52} />
+                <span className={c.factionName}>{factionName(f)}</span>
+              </button>
               <div className={c.stepper}>
                 <button
                   type="button"
@@ -199,7 +243,9 @@ export function Ballot({ game }: { game: GameView }) {
                 >
                   −
                 </button>
-                <span className={c.count}>{n}</span>
+                <span className={c.count} aria-label={`${n} votes on ${factionName(f)}`}>
+                  {n}
+                </span>
                 <button
                   type="button"
                   className={c.stepBtn}
@@ -215,30 +261,49 @@ export function Ballot({ game }: { game: GameView }) {
         })}
       </div>
 
-      <div className={c.actions}>
-        <Button
-          variant="primary"
-          disabled={!canSubmit}
-          onClick={() => submit.mutate({ gameId: game.id, playerName: name, votes, editToken: editToken ?? undefined })}
-        >
-          {submit.isPending ? 'Saving…' : hasBallot ? 'Update ballot' : 'Submit ballot'}
-        </Button>
-        {hasBallot && (
+      {(hasBallot || submit.error || withdraw.error) && (
+        <div className={c.status}>
+          {hasBallot && !dirty && <span className={c.saved}>✓ Saved as {mine.data!.playerName}. </span>}
+          {hasBallot && (
+            <button
+              type="button"
+              className={c.withdraw}
+              disabled={withdraw.isPending}
+              onClick={() => {
+                if (confirm('Withdraw your ballot? You will no longer be in this draw.')) {
+                  withdraw.mutate({ gameId: game.id, editToken: editToken! });
+                }
+              }}
+            >
+              Withdraw my ballot
+            </button>
+          )}
+          <ErrorText>
+            {(submit.error && errorMessage(submit.error)) || (withdraw.error && errorMessage(withdraw.error))}
+          </ErrorText>
+        </div>
+      )}
+
+      <div className={c.bar}>
+        <div className={c.pips} aria-live="polite">
+          {Array.from({ length: game.votesPerPlayer }, (_, i) => (
+            <span key={i} className={`${c.pip} ${i < spent ? c.pipFull : ''}`} />
+          ))}
+          <span className={c.left}>{hint}</span>
+        </div>
+        <div className={c.barButtons}>
           <Button
-            variant="danger"
-            disabled={withdraw.isPending}
-            onClick={() => {
-              if (confirm('Withdraw your ballot? You will no longer be in this draw.')) {
-                withdraw.mutate({ gameId: game.id, editToken: editToken! });
-              }
-            }}
+            variant="primary"
+            className={c.submit}
+            disabled={!canSubmit}
+            onClick={() =>
+              submit.mutate({ gameId: game.id, playerName: name, votes, editToken: editToken ?? undefined })
+            }
           >
-            Withdraw
+            {submit.isPending ? 'Saving…' : hasBallot ? (dirty ? 'Update' : 'Saved ✓') : 'Submit'}
           </Button>
-        )}
-        {hasBallot && !dirty && <span className={c.saved}>✓ Ballot saved as {mine.data!.playerName}</span>}
+        </div>
       </div>
-      <ErrorText>{(submit.error && errorMessage(submit.error)) || (withdraw.error && errorMessage(withdraw.error))}</ErrorText>
     </Card>
   );
 }

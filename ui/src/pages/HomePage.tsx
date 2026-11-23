@@ -25,14 +25,18 @@ const useStyles = createUseStyles((theme: Theme) => ({
     letterSpacing: '0.06em',
   },
   input: {
-    minHeight: 40,
+    minHeight: 48,
     width: '100%',
     padding: `0 ${theme.spacing.sm}`,
     background: theme.colors.background,
     border: `1px solid ${theme.colors.border}`,
     borderRadius: theme.borderRadius.md,
-    fontSize: theme.fontSizes.lg,
+    // 16px+ stops iOS Safari zooming in on focus.
+    fontSize: 17,
     colorScheme: 'dark',
+    textTransform: 'none',
+    letterSpacing: 'normal',
+    color: theme.colors.text,
   },
   expansion: { marginTop: theme.spacing.sm },
   expansionHead: {
@@ -40,14 +44,18 @@ const useStyles = createUseStyles((theme: Theme) => ({
     alignItems: 'center',
     gap: theme.spacing.sm,
     fontWeight: 600,
-    marginBottom: theme.spacing.sm,
+    minHeight: 44,
+    cursor: 'pointer',
+    '& input': { width: 20, height: 20, accentColor: theme.colors.primary },
   },
   chips: { display: 'flex', flexWrap: 'wrap', gap: theme.spacing.sm },
   chip: {
     display: 'flex',
     alignItems: 'center',
     gap: theme.spacing.sm,
-    padding: '4px 12px 4px 4px',
+    minHeight: 44,
+    padding: '4px 14px 4px 6px',
+    fontSize: theme.fontSizes.lg,
     borderRadius: 999,
     border: `1px solid ${theme.colors.border}`,
     background: theme.colors.background,
@@ -81,7 +89,8 @@ const useStyles = createUseStyles((theme: Theme) => ({
   badgeDone: { color: theme.colors.success, borderColor: theme.colors.success },
 }));
 
-const BASE_FACTIONS = FACTIONS.filter((f) => f.expansion === 'base').map((f) => f.id);
+const DEFAULT_EXPANSIONS = new Set<string>(['base', 'ixians-tleilaxu']);
+const DEFAULT_FACTIONS = FACTIONS.filter((f) => DEFAULT_EXPANSIONS.has(f.expansion)).map((f) => f.id);
 
 export function HomePage() {
   const c = useStyles();
@@ -92,7 +101,7 @@ export function HomePage() {
   const [name, setName] = useState('Dune night');
   const [gameDate, setGameDate] = useState(todayIso());
   const [votesPerPlayer, setVotesPerPlayer] = useState(DEFAULT_VOTES_PER_PLAYER);
-  const [selected, setSelected] = useState<Set<FactionId>>(new Set(BASE_FACTIONS));
+  const [selected, setSelected] = useState<Set<FactionId>>(new Set(DEFAULT_FACTIONS));
 
   const toggle = (id: FactionId) =>
     setSelected((prev) => {
@@ -174,7 +183,7 @@ export function HomePage() {
           </div>
 
           <div>
-            <Button variant="primary" onClick={submit} disabled={create.isPending || selected.size < 2 || !name.trim()}>
+            <Button variant="primary" block onClick={submit} disabled={create.isPending || selected.size < 2 || !name.trim()}>
               {create.isPending ? 'Creating…' : 'Create draw & get link'}
             </Button>
             <ErrorText>{create.error && errorMessage(create.error)}</ErrorText>

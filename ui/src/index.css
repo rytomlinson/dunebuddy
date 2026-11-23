@@ -19,3 +19,22 @@ select {
 a {
   color: #e8963f;
 }
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+button,
+a,
+input,
+label {
+  /* No 300ms double-tap-zoom delay and no grey flash on tap. */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+input[type='date'],
+input[type='number'] {
+  -webkit-appearance: none;
+  appearance: none;
+}

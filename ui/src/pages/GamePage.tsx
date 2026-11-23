@@ -10,7 +10,12 @@ import { Button, Card, ErrorText, Muted, Page } from '../components/ui';
 import { errorMessage, formatGameDate } from '../utils';
 
 const useStyles = createUseStyles((theme: Theme) => ({
-  title: { fontSize: theme.fontSizes.xxl, fontWeight: 700, lineHeight: 1.2 },
+  title: {
+    fontSize: theme.fontSizes.xxl,
+    fontWeight: 700,
+    lineHeight: 1.2,
+    '@media (max-width: 600px)': { fontSize: 24 },
+  },
   meta: { color: theme.colors.textSecondary, marginTop: theme.spacing.xs },
   intro: { marginBottom: theme.spacing.lg },
   share: { display: 'flex', gap: theme.spacing.sm, alignItems: 'center', flexWrap: 'wrap', marginTop: theme.spacing.md },
@@ -23,6 +28,8 @@ const useStyles = createUseStyles((theme: Theme) => ({
     border: `1px solid ${theme.colors.border}`,
     borderRadius: theme.borderRadius.md,
     color: theme.colors.textSecondary,
+    fontSize: 16,
+    '@media (max-width: 600px)': { display: 'none' },
   },
   players: { display: 'flex', flexWrap: 'wrap', gap: theme.spacing.sm, margin: `${theme.spacing.sm} 0 ${theme.spacing.md}` },
   player: {
@@ -75,13 +82,18 @@ export function GamePage() {
   const canCalculate = g.players.length >= MIN_PLAYERS && g.players.length <= g.factions.length;
   const shareUrl = window.location.href;
 
-  const copy = async () => {
+  const canShare = typeof navigator.share === 'function';
+  const share = async () => {
     try {
+      if (canShare) {
+        await navigator.share({ title: `${g.name} faction draw`, text: 'Cast your faction votes', url: shareUrl });
+        return;
+      }
       await navigator.clipboard.writeText(shareUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      /* clipboard blocked; the URL is selectable in the field */
+      /* share cancelled or clipboard blocked; the URL is selectable in the field on larger screens */
     }
   };
 
@@ -95,7 +107,9 @@ export function GamePage() {
         {g.status === 'open' && (
           <div className={c.share}>
             <input className={c.url} readOnly value={shareUrl} onFocus={(e) => e.target.select()} aria-label="Share link" />
-            <Button onClick={copy}>{copied ? 'Copied ✓' : 'Copy link'}</Button>
+            <Button block onClick={share}>
+              {copied ? 'Link copied ✓' : canShare ? 'Share link with the table' : 'Copy link'}
+            </Button>
           </div>
         )}
       </div>
@@ -111,6 +125,7 @@ export function GamePage() {
             <div style={{ marginTop: 12 }}>
               <Button
                 variant="danger"
+                block
                 disabled={reset.isPending}
                 onClick={() => {
                   if (confirm('Reset the draw? Everyone will see that this result was discarded.')) {
@@ -130,7 +145,9 @@ export function GamePage() {
 
           <Card title={`Who's voted (${g.players.length}/${maxPlayers})`}>
             {g.players.length === 0 ? (
-              <Muted>No ballots yet. Share the link with your table.</Muted>
+              <div style={{ marginBottom: 12 }}>
+                <Muted>No ballots yet. Share the link with your table.</Muted>
+              </div>
             ) : (
               <div className={c.players}>
                 {g.players.map((p) => (
@@ -142,6 +159,7 @@ export function GamePage() {
             )}
             <Button
               variant="primary"
+              block
               disabled={!canCalculate || calculate.isPending}
               onClick={() => {
                 if (

@@ -7,6 +7,9 @@ const useStyles = createUseStyles((theme: Theme) => ({
     maxWidth: 880,
     margin: '0 auto',
     padding: `${theme.spacing.lg} ${theme.spacing.md} 64px`,
+    paddingLeft: `max(${theme.spacing.md}, env(safe-area-inset-left))`,
+    paddingRight: `max(${theme.spacing.md}, env(safe-area-inset-right))`,
+    '@media (max-width: 600px)': { paddingTop: theme.spacing.md },
   },
   header: {
     display: 'flex',
@@ -41,8 +44,9 @@ const useStyles = createUseStyles((theme: Theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
     gap: theme.spacing.sm,
-    minHeight: 40,
+    minHeight: 44,
     padding: `0 ${theme.spacing.md}`,
+    fontSize: theme.fontSizes.lg,
     borderRadius: theme.borderRadius.md,
     border: `1px solid ${theme.colors.border}`,
     background: theme.colors.surfaceHover,
@@ -64,6 +68,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
     color: theme.colors.error,
     borderColor: theme.colors.error,
   },
+  block: { '@media (max-width: 600px)': { width: '100%', minHeight: 48 } },
   error: {
     color: theme.colors.error,
     fontSize: theme.fontSizes.md,
@@ -103,10 +108,17 @@ export function Card({ title, children, actions }: { title?: ReactNode; children
 
 type Variant = 'default' | 'primary' | 'danger';
 
-export function Button({ variant = 'default', className, ...rest }: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant }) {
+export function Button({
+  variant = 'default',
+  block = false,
+  className,
+  ...rest
+}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant; /** Full width on phones. */ block?: boolean }) {
   const c = useStyles();
   const v = variant === 'primary' ? c.primary : variant === 'danger' ? c.danger : '';
-  return <button type="button" className={[c.button, v, className].filter(Boolean).join(' ')} {...rest} />;
+  return (
+    <button type="button" className={[c.button, v, block && c.block, className].filter(Boolean).join(' ')} {...rest} />
+  );
 }
 
 export function ErrorText({ children }: { children: ReactNode }) {
