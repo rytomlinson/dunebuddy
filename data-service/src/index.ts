@@ -32,25 +32,34 @@ initDb(
       }
 );
 
+// Everything is served under /dune (devyeti.pro/dune). The health check stays at the root for
+// the deploy script and uptime checks.
+const BASE = '/dune';
+
+app.get('/health', (_req, res) => {
+  res.json({ status: 'ok' });
+});
+
+// Old links (srv1307055.hstgr.cloud/g/…, /log/…, /rules) and the bare domain go to /dune.
+app.use((req, res, next) => {
+  if (req.path === BASE || req.path.startsWith(`${BASE}/`)) return next();
+  res.redirect(301, `${BASE}${req.originalUrl === '/' ? '/' : req.originalUrl}`);
+});
+
 // tRPC middleware
 app.use(
-  '/trpc',
+  `${BASE}/trpc`,
   createExpressMiddleware({
     router: appRouter,
     createContext: ({ req, res }): Context => ({ req, res }),
   })
 );
 
-// Health check endpoint
-app.get('/health', (_req, res) => {
-  res.json({ status: 'ok' });
-});
-
 // In production, serve the built UI from the same server, with SPA fallback for /g/:id links.
 const uiDist = resolve(import.meta.dirname, '../../ui/dist');
 if (existsSync(uiDist)) {
-  app.use(express.static(uiDist, { index: false, maxAge: '1h' }));
-  app.get('*', (_req, res) => {
+  app.use(BASE, express.static(uiDist, { index: false, maxAge: '1h' }));
+  app.get(`${BASE}*`, (_req, res) => {
     res.sendFile(resolve(uiDist, 'index.html'));
   });
 }

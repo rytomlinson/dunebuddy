@@ -19,7 +19,7 @@ cd "$(dirname "$0")/.."
 health_check() {
   for _ in $(seq 1 15); do
     if [ "$(curl -s -m 5 "$URL/health")" = '{"status":"ok"}' ] &&
-      [ "$(curl -s -m 5 -o /dev/null -w '%{http_code}' "$URL/")" = 200 ]; then
+      [ "$(curl -s -m 5 -o /dev/null -w '%{http_code}' "$URL/dune/")" = 200 ]; then
       return 0
     fi
     sleep 2

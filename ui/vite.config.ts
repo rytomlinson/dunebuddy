@@ -7,12 +7,14 @@ export default defineConfig(({ mode }) => {
   const apiPort = env.DATA_SERVICE_PORT || '3003';
 
   return {
+    // Served at devyeti.pro/dune (the server redirects everything else there).
+    base: '/dune/',
     plugins: [react()],
     server: {
       port: 3002,
       strictPort: true,
       proxy: {
-        '/trpc': {
+        '/dune/trpc': {
           target: `http://localhost:${apiPort}`,
           changeOrigin: true,
         },

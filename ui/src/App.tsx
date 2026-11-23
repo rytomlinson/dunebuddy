@@ -23,7 +23,7 @@ export function App() {
       <QueryClientProvider client={queryClient}>
         <Provider store={store}>
           <ThemeProvider theme={theme}>
-            <BrowserRouter>
+            <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '')}>
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/draw" element={<DrawPage />} />

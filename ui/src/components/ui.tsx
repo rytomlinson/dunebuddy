@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 import { createUseStyles } from 'react-jss';
 import type { Theme } from '../theme';
 
@@ -82,9 +83,9 @@ export function Page({ children }: { children: ReactNode }) {
   return (
     <div className={c.page}>
       <header className={c.header}>
-        <a href="/" className={c.brand}>
+        <Link to="/" className={c.brand}>
           Dune<span className={c.brandAccent}>Buddy</span>
-        </a>
+        </Link>
       </header>
       {children}
     </div>

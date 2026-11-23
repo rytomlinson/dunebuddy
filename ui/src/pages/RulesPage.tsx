@@ -256,7 +256,7 @@ export function RulesPage() {
   };
 
   const copyLink = async (s: RuleSection) => {
-    const url = `${window.location.origin}/rules#${s.id}`;
+    const url = `${window.location.origin}${import.meta.env.BASE_URL}rules#${s.id}`;
     try {
       if (typeof navigator.share === 'function') await navigator.share({ title: s.title, url });
       else await navigator.clipboard.writeText(url);

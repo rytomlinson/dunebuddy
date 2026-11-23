@@ -1,3 +1,4 @@
+/// <reference types="vite/client" />
 import type { Theme as AppTheme } from './theme';
 
 declare module 'react-jss' {

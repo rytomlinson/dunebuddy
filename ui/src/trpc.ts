@@ -9,7 +9,7 @@ export function createTrpcClient() {
   return trpc.createClient({
     links: [
       httpBatchLink({
-        url: '/trpc',
+        url: `${import.meta.env.BASE_URL}trpc`,
         // The rules endpoints need the group passcode; other endpoints ignore it.
         headers() {
           const passcode = loadRulesPasscode();

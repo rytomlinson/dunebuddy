@@ -96,7 +96,7 @@ export function FactionEmblem({ faction, size = 56 }: Props) {
   if (useCustom) {
     return (
       <img
-        src={`/factions/${f.id}.png`}
+        src={`${import.meta.env.BASE_URL}factions/${f.id}.png`}
         alt=""
         width={size}
         height={size}
