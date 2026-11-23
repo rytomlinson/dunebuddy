@@ -35,7 +35,7 @@ instead of Docker.
 ```bash
 npm install
 cp .env.example .env
-npm run db:up      # starts Postgres in Docker on localhost:5432
+npm run db:up      # starts Postgres in Docker on localhost:5434
 npm run migrate
 ```
 

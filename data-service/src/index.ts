@@ -37,7 +37,7 @@ app.get('/health', (_req, res) => {
   res.json({ status: 'ok' });
 });
 
-const PORT = process.env.PORT ?? 3001;
+const PORT = process.env.DATA_SERVICE_PORT ?? 3003;
 
 app.listen(PORT, () => {
   console.log(`Data service running on port ${PORT}`);
