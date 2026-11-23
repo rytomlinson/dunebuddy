@@ -74,3 +74,12 @@ npm run build
 
 TypeScript (strict), React 18 + Vite, Redux Toolkit, react-jss, tRPC, Zod, PostgreSQL with
 node-pg-migrate.
+
+## Deploying (Render)
+
+`render.yaml` defines a free web service (API and built UI on one server) plus a free Postgres
+database. In the Render dashboard, choose **New → Blueprint** and pick this repo. Each deploy builds
+the app, runs migrations on start, and serves it at `https://<service-name>.onrender.com`.
+
+Free-tier caveats: the service sleeps after about 15 minutes idle, so the first visit takes ~30s.
+The free database expires after 30 days unless upgraded.

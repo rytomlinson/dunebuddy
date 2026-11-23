@@ -1,0 +1,24 @@
+# Render Blueprint: one web service (API + built UI) and a Postgres database.
+# Create it from the Render dashboard: New → Blueprint → pick this repo.
+services:
+  - type: web
+    name: dunebuddy
+    runtime: node
+    plan: free
+    buildCommand: npm ci --include=dev && npm run build
+    # Migrations are idempotent, so running them on every start is safe.
+    startCommand: npm run migrate && npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: '22'
+      - key: DATABASE_URL
+        fromDatabase:
+          name: dunebuddy-db
+          property: connectionString
+
+databases:
+  - name: dunebuddy-db
+    plan: free
+    databaseName: dunebuddy
+    user: dunebuddy

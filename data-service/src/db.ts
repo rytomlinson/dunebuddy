@@ -2,13 +2,7 @@ import pg from 'pg';
 
 const { Pool } = pg;
 
-export interface DbConfig {
-  host: string;
-  port: number;
-  database: string;
-  user: string;
-  password: string;
-}
+export type DbConfig = pg.PoolConfig;
 
 let pool: pg.Pool | null = null;
 

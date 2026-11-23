@@ -19,10 +19,14 @@
     "migrate:create": "npm run migrate:create -w db",
     "db:up": "docker compose up -d db",
     "db:down": "docker compose down",
-    "test": "npm test -w common"
+    "test": "npm test -w common",
+    "start": "npm run start -w data-service"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",
     "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=20.11"
   }
 }
