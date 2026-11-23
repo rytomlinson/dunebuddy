@@ -9,7 +9,7 @@ export type CardGroup = 'weapon' | 'defense' | 'special' | 'worthless' | 'unknow
 export interface CardKind {
   id: string;
   name: string;
-  /** Short label for chips; omitted when the glyph alone is clear. */
+  /** Initials shown on chips beside the glyph; omitted when the glyph alone is clear. */
   short?: string;
   glyph: string;
   group: CardGroup;
@@ -31,22 +31,22 @@ export const CARD_KINDS = [
   { id: 'special', name: 'Special (not identified)', glyph: '✦', group: 'special', expansion: 'base', palette: true },
   { id: 'unknown', name: 'Unknown card', glyph: '?', group: 'unknown', expansion: 'base', palette: true },
 
-  { id: 'karama', name: 'Karama', short: 'Karama', glyph: '✦', group: 'special', expansion: 'base' },
-  { id: 'truthtrump', name: 'Truthtrump', short: 'Truth', glyph: '✦', group: 'special', expansion: 'base' },
-  { id: 'cheap-hero', name: 'Cheap Hero', short: 'Cheap Hero', glyph: '✦', group: 'special', expansion: 'base' },
-  { id: 'tleilaxu-ghola', name: 'Tleilaxu Ghola', short: 'Ghola', glyph: '✦', group: 'special', expansion: 'base' },
-  { id: 'hajr', name: 'Hajr', short: 'Hajr', glyph: '✦', group: 'special', expansion: 'base' },
-  { id: 'weather-control', name: 'Weather Control', short: 'Weather', glyph: '✦', group: 'special', expansion: 'base' },
-  { id: 'family-atomics', name: 'Family Atomics', short: 'Atomics', glyph: '✦', group: 'special', expansion: 'base' },
+  { id: 'karama', name: 'Karama', short: 'KA', glyph: '✦', group: 'special', expansion: 'base' },
+  { id: 'truthtrump', name: 'Truthtrump', short: 'TT', glyph: '✦', group: 'special', expansion: 'base' },
+  { id: 'cheap-hero', name: 'Cheap Hero', short: 'CH', glyph: '✦', group: 'special', expansion: 'base' },
+  { id: 'tleilaxu-ghola', name: 'Tleilaxu Ghola', short: 'TG', glyph: '✦', group: 'special', expansion: 'base' },
+  { id: 'hajr', name: 'Hajr', short: 'HJ', glyph: '✦', group: 'special', expansion: 'base' },
+  { id: 'weather-control', name: 'Weather Control', short: 'WC', glyph: '✦', group: 'special', expansion: 'base' },
+  { id: 'family-atomics', name: 'Family Atomics', short: 'FA', glyph: '✦', group: 'special', expansion: 'base' },
 
-  { id: 'poison-blade', name: 'Poison Blade', short: 'P.Blade', glyph: `🗡${E}`, group: 'weapon', expansion: 'ixians-tleilaxu' },
-  { id: 'artillery-strike', name: 'Artillery Strike', short: 'Artillery', glyph: '💥', group: 'weapon', expansion: 'ixians-tleilaxu' },
-  { id: 'weirding-way', name: 'Weirding Way', short: 'Weirding', glyph: `🗡${E}`, group: 'weapon', expansion: 'ixians-tleilaxu' },
-  { id: 'shield-snooper', name: 'Shield Snooper', short: 'Shd.Snoop', glyph: `🛡${E}`, group: 'defense', expansion: 'ixians-tleilaxu' },
-  { id: 'chemistry', name: 'Chemistry', short: 'Chemistry', glyph: '👃', group: 'defense', expansion: 'ixians-tleilaxu' },
-  { id: 'amal', name: 'Amal', short: 'Amal', glyph: '✦', group: 'special', expansion: 'ixians-tleilaxu' },
-  { id: 'harass-withdraw', name: 'Harass and Withdraw', short: 'Harass', glyph: '✦', group: 'special', expansion: 'ixians-tleilaxu' },
-  { id: 'reinforcements', name: 'Reinforcements', short: 'Reinforce', glyph: '✦', group: 'special', expansion: 'ixians-tleilaxu' },
+  { id: 'poison-blade', name: 'Poison Blade', short: 'PB', glyph: `🗡${E}`, group: 'weapon', expansion: 'ixians-tleilaxu' },
+  { id: 'artillery-strike', name: 'Artillery Strike', short: 'AS', glyph: '💥', group: 'weapon', expansion: 'ixians-tleilaxu' },
+  { id: 'weirding-way', name: 'Weirding Way', short: 'WW', glyph: `🗡${E}`, group: 'weapon', expansion: 'ixians-tleilaxu' },
+  { id: 'shield-snooper', name: 'Shield Snooper', short: 'SS', glyph: `🛡${E}`, group: 'defense', expansion: 'ixians-tleilaxu' },
+  { id: 'chemistry', name: 'Chemistry', short: 'CM', glyph: '👃', group: 'defense', expansion: 'ixians-tleilaxu' },
+  { id: 'amal', name: 'Amal', short: 'AM', glyph: '✦', group: 'special', expansion: 'ixians-tleilaxu' },
+  { id: 'harass-withdraw', name: 'Harass and Withdraw', short: 'HW', glyph: '✦', group: 'special', expansion: 'ixians-tleilaxu' },
+  { id: 'reinforcements', name: 'Reinforcements', short: 'RE', glyph: '✦', group: 'special', expansion: 'ixians-tleilaxu' },
 ] as const satisfies readonly CardKind[];
 
 export type CardKindId = (typeof CARD_KINDS)[number]['id'];

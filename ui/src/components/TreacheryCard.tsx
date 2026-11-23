@@ -25,6 +25,8 @@ const useStyles = createUseStyles((theme: Theme) => ({
     fontWeight: 600,
     lineHeight: 1,
     whiteSpace: 'nowrap',
+    // Never squeezed by a long name beside it in a picker row.
+    flexShrink: 0,
     color: theme.colors.text,
   },
   large: { minHeight: 44, minWidth: 44, padding: '0 10px', fontSize: 15 },

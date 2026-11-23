@@ -27,9 +27,8 @@ export function handOf(state: LogbookState, faction: FactionId): LoggedCard[] {
 }
 
 function label(kind: string): string {
-  const k = getCardKind(kind);
-  // "Snooper (poison defense)" reads as just "Snooper" in the history.
-  return k.short ?? k.name.replace(/ \(.*\)$/, '');
+  // Full names read better than chip initials; "Snooper (poison defense)" becomes "Snooper".
+  return getCardKind(kind).name.replace(/ \(.*\)$/, '');
 }
 
 function commit(state: LogbookState, description: string, hands: Hands, discards = state.discards): LogbookState {
