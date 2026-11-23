@@ -6,7 +6,9 @@ export interface Context {
   res: Response;
 }
 
-const t = initTRPC.context<Context>().create();
+// Stack traces go in error responses only when explicitly running in development (`npm run dev`),
+// so a server started any other way (pm2 on the VPS) never leaks them.
+const t = initTRPC.context<Context>().create({ isDev: process.env.NODE_ENV === 'development' });
 
 export const router = t.router;
 export const publicProcedure = t.procedure;
