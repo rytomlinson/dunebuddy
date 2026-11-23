@@ -1,0 +1,15 @@
+services:
+  db:
+    image: postgres:16
+    container_name: dunebuddy-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: dunebuddy
+    ports:
+      - '127.0.0.1:5432:5432'
+    volumes:
+      - dunebuddy-pg:/var/lib/postgresql/data
+
+volumes:
+  dunebuddy-pg:

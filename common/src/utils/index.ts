@@ -9,3 +9,5 @@ export function parseDate(dateString: string): Date {
 export function isNonNull<T>(value: T | null | undefined): value is T {
   return value !== null && value !== undefined;
 }
+
+export * from './assignFactions.js';

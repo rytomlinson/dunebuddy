@@ -1,86 +1,76 @@
 # DuneBuddy
 
-A TypeScript monorepo with React, Redux Toolkit, tRPC, and PostgreSQL.
+A neutral referee for our games of the Dune board game (Gale Force Nine edition).
 
-## Prerequisites
+## Features
 
-- Node.js 18+
-- PostgreSQL 14+
+### Faction draw
+
+1. Someone creates a draw for game night. They choose the date, how many votes each player gets
+   (default 2) and which factions are in play (base game, Ixians & Tleilaxu, CHOAM & Richese).
+2. They share the link. Each player enters their name and spends **all** of their votes. A player
+   can put every vote on one faction or split them however they like. Votes stay hidden until the
+   draw.
+3. Anyone presses **Calculate assignments**. The server resolves the draw:
+   - The highest remaining bid on any faction wins it. Ties are settled by a random draw.
+   - Each player wins at most one faction. Once a player is seated, their other bids drop out, and
+     the next-highest bid is resolved. A player who loses their top choice can still win their
+     second.
+   - Players left without a faction are dealt one at random from the unclaimed factions.
+4. The result is **locked** and shown to everyone, with a reason for each assignment and every
+   ballot revealed. Pressing Calculate again returns the same result. **Reset draw** reopens
+   voting. The discarded result stays in the game's history so everyone can see it was reset.
+
+Players can change or withdraw their ballot until the draw, but only from the device they voted on.
+Swapping into an unclaimed faction happens at the table, outside the app.
+
+The faction emblems are simple original designs, not the game's artwork. To use your own images,
+see `ui/public/factions/README.md`.
 
 ## Setup
 
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
+Requires Node.js 18+ and Docker (for Postgres). If you have a local PostgreSQL 14+, you can use it
+instead of Docker.
 
-2. Create database:
-   ```bash
-   createdb dunebuddy
-   ```
-
-3. Copy environment file and configure:
-   ```bash
-   cp .env.example .env
-   # Edit .env with your database credentials
-   ```
-
-4. Run migrations:
-   ```bash
-   npm run migrate
-   ```
+```bash
+npm install
+cp .env.example .env
+npm run db:up      # starts Postgres in Docker on localhost:5432
+npm run migrate
+```
 
 ## Development
 
-Start both frontend and backend in development mode:
 ```bash
-npm run dev
-```
-
-Or run them separately:
-```bash
-npm run dev:data-service  # Backend on port 3001
-npm run dev:ui            # Frontend on port 3000
-```
-
-## Build
-
-```bash
+npm run dev        # data-service on :3003, UI on http://localhost:3002
+npm test           # faction assignment tests
 npm run build
 ```
 
-## Project Structure
+## Project structure
 
 ```
 /common/src/
-  /schemas/        - Zod schemas and TypeScript types
-  /utils/          - Shared utility functions
-  db.ts            - Database connection utilities
+  factions.ts      - Faction and expansion list
+  /schemas/        - Zod schemas and shared types
+  /utils/          - Shared logic, including assignFactions (the draw algorithm)
 
 /data-service/src/
-  /models/         - Database models (CRUD operations)
-  /trpcRouters/    - tRPC API endpoints
-  index.ts         - Express server with tRPC
+  db.ts            - Postgres helpers (named params, transactions)
+  /models/         - Database access
+  /trpcRouters/    - tRPC API
+  index.ts         - Express server
 
 /ui/src/
-  /components/     - React components
+  /pages/          - Home (create a draw) and Game (ballot and results)
+  /components/     - Ballot, results, faction emblems, UI primitives
   /slices/         - Redux slices
-  /hooks/          - Custom React hooks
-  /utils/          - Frontend utilities
-  store.ts         - Redux store configuration
-  trpc.ts          - tRPC client setup
-  App.tsx          - Root component
-  main.tsx         - Entry point
+  /utils/          - Frontend helpers, including per-device ballot tokens
 
 /db/migrations/    - node-pg-migrate migrations
 ```
 
-## Tech Stack
+## Tech stack
 
-- **Language**: TypeScript (strict mode)
-- **Frontend**: React 18, Vite
-- **State Management**: Redux Toolkit
-- **Styling**: react-jss
-- **API**: tRPC
-- **Validation**: Zod
-- **Database**: PostgreSQL with node-pg-migrate
+TypeScript (strict), React 18 + Vite, Redux Toolkit, react-jss, tRPC, Zod, PostgreSQL with
+node-pg-migrate.

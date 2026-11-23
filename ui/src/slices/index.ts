@@ -1,1 +1,1 @@
-export * from './itemSlice';
+export * from './playerSlice';

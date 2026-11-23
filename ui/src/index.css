@@ -1,9 +1,21 @@
 body {
-  background-color: #121212;
-  color: #FFFFFF;
+  background-color: #16110c;
+  color: #f3e9da;
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
 
 #root {
   min-height: 100vh;
+}
+
+button,
+input,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: #e8963f;
 }

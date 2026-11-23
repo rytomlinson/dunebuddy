@@ -90,3 +90,26 @@ export async function closeDb(): Promise<void> {
     pool = null;
   }
 }
+
+export type TxQuery = <T>(sql: string, params?: Record<string, unknown>) => Promise<QueryResult<T>>;
+
+/** Runs `fn` inside a transaction, committing on success and rolling back on error. */
+export async function withTransaction<R>(fn: (q: TxQuery) => Promise<R>): Promise<R> {
+  const client = await getPool().connect();
+  const q: TxQuery = async <T>(sql: string, params: Record<string, unknown> = {}) => {
+    const { text, values } = convertNamedParams(sql, params);
+    const result = await client.query(text, values);
+    return { rows: result.rows as T[], rowCount: result.rowCount ?? 0 };
+  };
+  try {
+    await client.query('BEGIN');
+    const out = await fn(q);
+    await client.query('COMMIT');
+    return out;
+  } catch (err) {
+    await client.query('ROLLBACK');
+    throw err;
+  } finally {
+    client.release();
+  }
+}

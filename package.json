@@ -16,7 +16,10 @@
     "build:data-service": "npm run build -w data-service",
     "build:ui": "npm run build -w ui",
     "migrate": "npm run migrate -w db",
-    "migrate:create": "npm run migrate:create -w db"
+    "migrate:create": "npm run migrate:create -w db",
+    "db:up": "docker compose up -d db",
+    "db:down": "docker compose down",
+    "test": "npm test -w common"
   },
   "devDependencies": {
     "concurrently": "^8.2.2",

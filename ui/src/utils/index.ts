@@ -1,20 +1,31 @@
-export function formatRelativeDate(date: Date): string {
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffSecs = Math.floor(diffMs / 1000);
-  const diffMins = Math.floor(diffSecs / 60);
-  const diffHours = Math.floor(diffMins / 60);
-  const diffDays = Math.floor(diffHours / 24);
+export * from './storage';
 
-  if (diffSecs < 60) return 'just now';
-  if (diffMins < 60) return `${diffMins}m ago`;
-  if (diffHours < 24) return `${diffHours}h ago`;
-  if (diffDays < 7) return `${diffDays}d ago`;
-
-  return date.toLocaleDateString();
+export function todayIso(): string {
+  const d = new Date();
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
 
-export function truncate(str: string, maxLength: number): string {
-  if (str.length <= maxLength) return str;
-  return str.slice(0, maxLength - 3) + '...';
+export function formatGameDate(iso: string): string {
+  const [y, m, d] = iso.split('-').map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString(undefined, {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  });
+}
+
+export function errorMessage(err: unknown): string {
+  if (err && typeof err === 'object' && 'message' in err && typeof err.message === 'string') {
+    // tRPC wraps zod failures as a JSON array of issues.
+    try {
+      const issues = JSON.parse(err.message) as { message: string }[];
+      if (Array.isArray(issues) && issues[0]?.message) return issues[0].message;
+    } catch {
+      /* plain message */
+    }
+    return err.message;
+  }
+  return 'Something went wrong';
 }
