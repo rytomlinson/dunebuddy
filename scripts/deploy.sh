@@ -53,7 +53,7 @@ if git fetch -q origin 2>/dev/null && [ "$(git rev-parse HEAD)" != "$(git rev-pa
   echo "Note: $SHA isn't pushed to GitHub yet. Deploying it anyway."
 fi
 
-echo "Uploading $SHA…"
+echo "Uploading ${SHA}…"
 git archive --format=tar HEAD | ssh -o BatchMode=yes "$HOST" "cat > /tmp/dunebuddy-$SHA.tar"
 
 echo "Building on the server (the current release keeps serving)…"
