@@ -10,7 +10,7 @@
 set -euo pipefail
 
 HOST="${DEPLOY_HOST:-root@72.61.65.153}"
-URL="${DEPLOY_URL:-https://srv1307055.hstgr.cloud}"
+URL="${DEPLOY_URL:-https://devyeti.pro}"
 APP_DIR=/var/www/dunebuddy
 PM2_NAME=dunebuddy-api
 

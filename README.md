@@ -101,7 +101,7 @@ node-pg-migrate.
 
 ## Deploying
 
-Live at **https://srv1307055.hstgr.cloud**, on the Hostinger VPS alongside mjbuddy and vetboats.
+Live at **https://devyeti.pro/dune**, on the Hostinger VPS alongside mjbuddy and vetboats. The app is served under `/dune`; any other path (including old https://srv1307055.hstgr.cloud links) redirects there.
 It runs from `/var/www/dunebuddy` under pm2 (`dunebuddy-api`, port 3201), behind nginx with a
 Let's Encrypt certificate, using its own database in the server's Postgres. Server secrets live in
 `/var/www/dunebuddy/.env`.
