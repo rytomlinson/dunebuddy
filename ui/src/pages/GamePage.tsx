@@ -132,7 +132,7 @@ export function GamePage() {
                   onClick={async () => {
                     const existing = loadGameLogbook(gameId);
                     if (existing) return navigate(`/log/${existing}`);
-                    const name = `${g.name} logbook`;
+                    const name = formatGameDate(g.gameDate);
                     const { id } = await createLogbook.mutateAsync({
                       name,
                       factions: g.factions,

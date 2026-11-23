@@ -4,7 +4,7 @@ import { createUseStyles } from 'react-jss';
 import type { FactionId } from 'common';
 import { trpc } from '../trpc';
 import type { Theme } from '../theme';
-import { errorMessage, loadLogbooks, rememberLogbook } from '../utils';
+import { errorMessage, formatGameDate, loadLogbooks, rememberLogbook, todayIso } from '../utils';
 import { DEFAULT_FACTIONS, FactionPicker, orderedFactions } from './FactionPicker';
 import { Button, Card, ErrorText, Muted } from './ui';
 
@@ -56,7 +56,7 @@ export function LogbookStarter() {
   const navigate = useNavigate();
   const [saved] = useState(loadLogbooks);
   const [open, setOpen] = useState(() => loadLogbooks().length === 0);
-  const [name, setName] = useState('Atreides logbook');
+  const [name, setName] = useState(() => formatGameDate(todayIso()));
   const [selected, setSelected] = useState<Set<FactionId>>(new Set(DEFAULT_FACTIONS));
   const [openingHands, setOpeningHands] = useState(true);
   const create = trpc.logbook.create.useMutation({

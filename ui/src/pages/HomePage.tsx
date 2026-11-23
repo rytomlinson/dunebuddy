@@ -33,16 +33,16 @@ const useStyles = createUseStyles((theme: Theme) => ({
 
 const TOOLS: { to: string; name: string; blurb: string; emblem: FactionId }[] = [
   {
-    to: '/draw',
-    name: 'Draw for factions',
-    blurb: 'Everyone votes for the factions they want, then the app assigns them fairly.',
-    emblem: 'emperor',
-  },
-  {
     to: '/rules',
     name: 'Rules reference',
     blurb: 'Search the rulebooks and official FAQ, with every edit logged.',
     emblem: 'bene-gesserit',
+  },
+  {
+    to: '/draw',
+    name: 'Draw for factions',
+    blurb: 'Everyone votes for the factions they want, then the app assigns them fairly.',
+    emblem: 'emperor',
   },
   {
     to: '/logbook',
