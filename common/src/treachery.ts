@@ -32,7 +32,7 @@ export const CARD_KINDS = [
   { id: 'unknown', name: 'Unknown card', glyph: '?', group: 'unknown', expansion: 'base', palette: true },
 
   { id: 'karama', name: 'Karama', short: 'KA', glyph: '✦', group: 'special', expansion: 'base' },
-  { id: 'truthtrump', name: 'Truthtrump', short: 'TT', glyph: '✦', group: 'special', expansion: 'base' },
+  { id: 'truthtrump', name: 'Truthtrance', short: 'TT', glyph: '✦', group: 'special', expansion: 'base' },
   { id: 'cheap-hero', name: 'Cheap Hero', short: 'CH', glyph: '✦', group: 'special', expansion: 'base' },
   { id: 'tleilaxu-ghola', name: 'Tleilaxu Ghola', short: 'TG', glyph: '✦', group: 'special', expansion: 'base' },
   { id: 'hajr', name: 'Hajr', short: 'HJ', glyph: '✦', group: 'special', expansion: 'base' },
@@ -40,10 +40,12 @@ export const CARD_KINDS = [
   { id: 'family-atomics', name: 'Family Atomics', short: 'FA', glyph: '✦', group: 'special', expansion: 'base' },
 
   { id: 'poison-blade', name: 'Poison Blade', short: 'PB', glyph: `🗡${E}`, group: 'weapon', expansion: 'ixians-tleilaxu' },
+  { id: 'poison-tooth', name: 'Poison Tooth', short: 'PT', glyph: `☠${E}`, group: 'weapon', expansion: 'ixians-tleilaxu' },
   { id: 'artillery-strike', name: 'Artillery Strike', short: 'AS', glyph: '💥', group: 'weapon', expansion: 'ixians-tleilaxu' },
   { id: 'weirding-way', name: 'Weirding Way', short: 'WW', glyph: `🗡${E}`, group: 'weapon', expansion: 'ixians-tleilaxu' },
   { id: 'shield-snooper', name: 'Shield Snooper', short: 'SS', glyph: `🛡${E}`, group: 'defense', expansion: 'ixians-tleilaxu' },
   { id: 'chemistry', name: 'Chemistry', short: 'CM', glyph: '👃', group: 'defense', expansion: 'ixians-tleilaxu' },
+  { id: 'thumper', name: 'Thumper', short: 'TH', glyph: '✦', group: 'special', expansion: 'ixians-tleilaxu' },
   { id: 'amal', name: 'Amal', short: 'AM', glyph: '✦', group: 'special', expansion: 'ixians-tleilaxu' },
   { id: 'harass-withdraw', name: 'Harass and Withdraw', short: 'HW', glyph: '✦', group: 'special', expansion: 'ixians-tleilaxu' },
   { id: 'reinforcements', name: 'Reinforcements', short: 'RE', glyph: '✦', group: 'special', expansion: 'ixians-tleilaxu' },

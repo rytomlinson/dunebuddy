@@ -51,7 +51,8 @@ const useStyles = createUseStyles((theme: Theme) => ({
 const CARD_MENTIONS: [RegExp, string][] = [
   [/\bShield Snooper\b/, 'shield-snooper'],
   [/\bPoison Blade\b/, 'poison-blade'],
-  [/\bPoison Tooth\b/, 'poison'],
+  [/\bPoison Tooth\b/, 'poison-tooth'],
+  [/\bThumper\b/, 'thumper'],
   [/\bArtillery Strike\b/, 'artillery-strike'],
   [/\bWeirding Way\b/, 'weirding-way'],
   [/\bChemistry\b/, 'chemistry'],
