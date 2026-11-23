@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { FACTION_IDS } from '../factions.js';
+import { FACTION_IDS, type FactionId } from '../factions.js';
 
 export const FactionIdSchema = z.enum(FACTION_IDS);
 
@@ -71,7 +71,7 @@ export interface GameView {
   name: string;
   gameDate: string;
   votesPerPlayer: number;
-  factions: string[];
+  factions: FactionId[];
   status: GameStatus;
   players: string[];
   result: DrawResult | null;

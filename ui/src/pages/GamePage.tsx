@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { createUseStyles } from 'react-jss';
 import { MIN_PLAYERS, maxPlayersFor } from 'common';
 import { trpc } from '../trpc';
@@ -7,7 +7,7 @@ import type { Theme } from '../theme';
 import { Ballot } from '../components/Ballot';
 import { DrawResults, PreviousDraws } from '../components/DrawResults';
 import { Button, Card, ErrorText, Muted, Page } from '../components/ui';
-import { errorMessage, formatGameDate } from '../utils';
+import { errorMessage, formatGameDate, loadGameLogbook, rememberLogbook, saveGameLogbook } from '../utils';
 
 const useStyles = createUseStyles((theme: Theme) => ({
   title: {
@@ -59,6 +59,8 @@ export function GamePage() {
   const calculate = trpc.game.calculate.useMutation({ onSuccess: () => utils.game.get.invalidate({ gameId }) });
   const reset = trpc.game.reset.useMutation({ onSuccess: () => utils.game.get.invalidate({ gameId }) });
   const [copied, setCopied] = useState(false);
+  const navigate = useNavigate();
+  const createLogbook = trpc.logbook.create.useMutation();
 
   if (game.isLoading) {
     return (
@@ -117,6 +119,37 @@ export function GamePage() {
       {g.status === 'calculated' && g.result ? (
         <>
           <DrawResults result={g.result} resetHistory={g.resetHistory} />
+          {g.factions.includes('atreides') && (
+            <Card title="Playing Atreides?">
+              <Muted>
+                Open a private card logbook for this game, with these factions already set up. Don’t share its link.
+              </Muted>
+              <div style={{ marginTop: 12 }}>
+                <Button
+                  variant="primary"
+                  block
+                  disabled={createLogbook.isPending}
+                  onClick={async () => {
+                    const existing = loadGameLogbook(gameId);
+                    if (existing) return navigate(`/log/${existing}`);
+                    const name = `${g.name} logbook`;
+                    const { id } = await createLogbook.mutateAsync({
+                      name,
+                      factions: g.factions,
+                      gameId,
+                      openingHands: true,
+                    });
+                    saveGameLogbook(gameId, id);
+                    rememberLogbook({ id, name, createdAt: new Date().toISOString() });
+                    navigate(`/log/${id}`);
+                  }}
+                >
+                  {loadGameLogbook(gameId) ? 'Open my Atreides logbook' : 'Start Atreides logbook'}
+                </Button>
+              </div>
+              <ErrorText>{createLogbook.error && errorMessage(createLogbook.error)}</ErrorText>
+            </Card>
+          )}
           <Card title="Need a redo?">
             <Muted>
               Resetting reopens voting and redraws on the next calculate. The current result is kept in this

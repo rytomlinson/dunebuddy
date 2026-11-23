@@ -8,6 +8,7 @@ import { trpc, createTrpcClient } from './trpc';
 import { theme } from './theme';
 import { HomePage } from './pages/HomePage';
 import { GamePage } from './pages/GamePage';
+import { LogbookPage } from './pages/LogbookPage';
 
 export function App() {
   const [queryClient] = useState(() => new QueryClient());
@@ -22,6 +23,7 @@ export function App() {
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/g/:gameId" element={<GamePage />} />
+                <Route path="/log/:logId" element={<LogbookPage />} />
                 <Route path="*" element={<HomePage />} />
               </Routes>
             </BrowserRouter>
